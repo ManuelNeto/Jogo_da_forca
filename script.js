@@ -1,5 +1,6 @@
 
 let categoryName = document.querySelector("#category");
+let dashes = document.querySelector(".dashes");
 let currentWord;
 let randomKeyArr = [];
 
@@ -7,7 +8,7 @@ let randomKeyArr = [];
 let categories = {
     frutas: ["banana", "maça", "laranja", "mamao", "uva", "melancia", "melao"],
     profissões: ["engenheiro", "advogado", "medico", "professor", "pescador"],
-    animais: ["papagaio", "rooster", "cachorro", "gato", "galinha", "cavalo", "porco"],
+    animais: ["papagaio", "galo", "cachorro", "gato", "galinha", "cavalo", "porco"],
     cores: ["amarelo", "azul", "laranja", "roxo", "vermelho", "marrom"]
 }
 
@@ -50,9 +51,21 @@ function setWord() {
     return wordsArray[wordsIndex];
 }
 
+//Oculta a palavra
+function hideWord(word) {
+    console.log(word);
+    let hideWord = "";
+    for (const iterator of word) {
+        hideWord += "-"
+    }
+    dashes.innerHTML = hideWord;
+    return hideWord;
+}
+
 function init(){
     setCategoryName();
-    console.log(setWord());
+    //Coloquei só para testar
+    console.log(hideWord(setWord()));
 }
 
 window.addEventListener("load", init);
