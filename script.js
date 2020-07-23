@@ -1,6 +1,8 @@
 
 let categoryName = document.querySelector("#category");
+let wrongletters = document.querySelector(".wrongletters");
 let dashes = document.querySelector(".dashes");
+let numTry = 0;
 let currentWord;
 let randomKeyArr = [];
 
@@ -48,6 +50,7 @@ function setCategoryName() {
 function setWord() {
     let wordsArray = categories[categoryName.innerHTML];
     let wordsIndex  = getRandomNumber(wordsArray.length);
+    currentWord = wordsArray[wordsIndex];
     return wordsArray[wordsIndex];
 }
 
@@ -59,7 +62,53 @@ function hideWord(word) {
         hideWord += "-"
     }
     dashes.innerHTML = hideWord;
+    wrongletters.innerHTML = "Letras erradas:";
     return hideWord;
+}
+
+
+function getCharCode(e) {
+    numTry +=1;
+    /* let string = randomWordGlobal[0];
+    let keyValue = String.fromCharCode(e.keyCode);
+    matchKeyToWord(keyValue, string); */
+    contains(e.key);
+    return e.key
+}
+
+//Vai atualiza o dash a cada letra adicionada
+//mudar nomenclaturas
+//falta atualizar as letras erradas
+function contains (letter){
+
+    let algumaword = "";
+    for (let i = 0; i < currentWord.length; i++) {
+        if(currentWord[i] === letter){
+            algumaword += letter;
+        }else if(dashes.innerHTML[i] != "-"){
+            algumaword += dashes.innerHTML[i];
+        }else{
+            algumaword += "-";
+        }        
+    }
+
+    dashes.innerHTML = algumaword;
+
+    //essa verificação daqui
+    if(!dashes.innerHTML.includes('-')) {
+        dashes.innerHTML = "Você venceu!";
+        window.removeEventListener("keypress", getCharCode);
+    } else if(numTry > 7){
+        dashes.innerHTML = "Você perdeu!";
+        window.removeEventListener("keypress", getCharCode);
+    }
+}
+
+function win() {
+    /*if(!dashesStr.includes('-')) {
+        dashes.innerHTML = "Você venceu!";
+        window.removeEventListener("keypress", getCharCode);
+    }*/
 }
 
 function init(){
@@ -68,4 +117,5 @@ function init(){
     console.log(hideWord(setWord()));
 }
 
+window.addEventListener("keypress", getCharCode);
 window.addEventListener("load", init);

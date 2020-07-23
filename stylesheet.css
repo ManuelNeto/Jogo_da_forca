@@ -65,8 +65,8 @@ div.dashes {
 	color:white;
 }
 
-#wrongletters {
-    transform: translate(-10px, -150px); /*acho que ficou num lugar bacana*/
+div.wrongletters {
+    transform: translate(0px, -110px); /*acho que ficou num lugar bacana*/
     float: initial;
     font-size: 2vw;
 	font: italic;	
