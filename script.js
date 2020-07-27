@@ -13,9 +13,10 @@ let correctletters = [];
 
 let classes = [];
 
-bodyParts.forEach(bodyPart => {
+/*bodyParts.forEach(bodyPart => {
     classes.push(bodyPart.className);
-});
+});*/
+
 
 
 let categories = {
@@ -158,6 +159,20 @@ function updateDashes(letter) {
     dashes.innerHTML = algumaword;
 }
 
+let bodyCounter = 0;
+
+function getBodyParts() {
+    //console.log("entrei");
+    //console.log(classes);
+    //if(classes.length > (bodyCounter - 8)) {
+    if(bodyParts.length > bodyCounter){
+        classes.pop();
+        bodyParts[bodyCounter].classList.remove("hide");
+        bodyCounter++;
+    }
+    //console.log(classes);
+}
+
 function game(letter){
     if(correctletters.includes(letter)){
         updateDashes(letter);
@@ -166,6 +181,7 @@ function game(letter){
         console.log("NÃO TEM");
         wronglettersArray.push(letter);
         wrongletters.innerHTML = "Letras erradas: " + wronglettersArray;
+        getBodyParts();
     }
     console.log(wronglettersArray);
 
@@ -176,16 +192,15 @@ function checkEndGame(){
     if(win()) {
         dashes.innerHTML = "Você venceu!";
         window.removeEventListener("keypress", getCharCode);
-    }else if(wronglettersArray.length > 7){
+    }else if(wronglettersArray.length > bodyParts.length){
+        eyes.forEach((eye => {
+            eye.style.opacity = 1;
+            eye.style.zIndex = 10;
+        }));
         dashes.innerHTML = "Você perdeu!";
         window.removeEventListener("keypress", getCharCode);
     }
 }
-
-
-
-
-
 
 function win() {
     if(!dashes.innerHTML.includes('-')) {
@@ -199,11 +214,17 @@ function init(){
     eyes.forEach((eye => {
         eye.style.opacity = 0.3;
     }));
+    /*for (let i = 2; i < bodyParts.length; i++) {
+        classes.push(bodyParts[i].className);
+        
+    }*/
+    bodyParts = bodyParts.slice(2, bodyParts.length);
+    console.log(bodyParts);
     setCategoryName();
     //Coloquei só para testar
     hideWord(setWord());
     window.addEventListener("keypress", getCharCode);
 }
 
-window.addEventListener("keypress", getCharCode);
+//window.addEventListener("keypress", getCharCode);
 window.addEventListener("load", init);
