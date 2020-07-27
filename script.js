@@ -9,15 +9,12 @@ let currentWord;
 let randomKeyArr = [];
 let wronglettersArray = [];
 let correctletters = [];
+let bodyCounter;
+
 
 
 let classes = [];
-
-/*bodyParts.forEach(bodyPart => {
-    classes.push(bodyPart.className);
-});*/
-
-
+bodyParts = bodyParts.slice(2, bodyParts.length);
 
 let categories = {
     frutas: ["banana", "maça", "laranja", "mamao", "uva", "melancia", "melao"],
@@ -81,7 +78,7 @@ function hideWord(word) {
 }
 
 
-function getCharCode(e) {
+function getCharCode(e){
     //numTry +=1;
     /* let string = randomWordGlobal[0];
     let keyValue = String.fromCharCode(e.keyCode);
@@ -90,102 +87,45 @@ function getCharCode(e) {
     return e.key
 }
 
-//Vai atualiza o dash a cada letra adicionada
-//mudar nomenclaturas
-//falta atualizar as letras erradas
-
-let worg = 0;
-
-/* function contains (letter){
-
-    console.log(classes);
-    console.log(bodyParts);
+function updateDashes(letter){
     let algumaword = "";
     for (let i = 0; i < currentWord.length; i++) {
         if(currentWord[i] === letter){
             algumaword += letter;
-            classes.pop();
-            bodyParts[0].classList.remove("hide");
-            console.log(classes);
-        }else if(dashes.innerHTML[i] != "-"){
+            //classes.pop();
+            //bodyParts[0].classList.remove("hide");
+            console.log('entrei');
+        } else if(dashes.innerHTML[i] != "-"){
             algumaword += dashes.innerHTML[i];
-            bodyParts[0].style.opacity = 1;
-            bodyParts[0].style.zIndex = 10;
-            console.log('oi');
-
-
-        }else{
+            //bodyParts[0].style.opacity = 1;
+            //bodyParts[0].style.zIndex = 10;
+        } else{
             algumaword += "-";
         }        
     }
-
-    dashes.innerHTML = algumaword;
-
-    //essa verificação daqui
-    if(!dashes.innerHTML.includes('-')) {
-        dashes.innerHTML = "Você venceu!";
-        window.removeEventListener("keypress", getCharCode);
-    } else if(numTry > 7){
-        eyes.forEach((eye => {
-            eye.style.opacity = 1;
-            eye.style.zIndex = 10;
-        }));
-        dashes.innerHTML = "Você perdeu!";
-        window.removeEventListener("keypress", getCharCode);
-    }
-}
-*/
-
-function updateDashes(letter) {
-    let algumaword = "";
-    for (let i = 0; i < currentWord.length; i++) {
-        if(currentWord[i] === letter){
-            algumaword += letter;
-            classes.pop();
-            bodyParts[0].classList.remove("hide");
-            //console.log(classes);
-        }else if(dashes.innerHTML[i] != "-"){
-            algumaword += dashes.innerHTML[i];
-            bodyParts[0].style.opacity = 1;
-            bodyParts[0].style.zIndex = 10;
-            //console.log('oi');
-
-
-        }else{
-            algumaword += "-";
-        }        
-    }
-
     dashes.innerHTML = algumaword;
 }
 
-let bodyCounter = 0;
+//let bodyCounter = 0;
 
-function getBodyParts() {
-    //console.log("entrei");
-    //console.log(classes);
-    //if(classes.length > (bodyCounter - 8)) {
+function getBodyParts(){
     if(bodyParts.length > bodyCounter){
         classes.pop();
         bodyParts[bodyCounter].classList.remove("hide");
+        console.log('desenhei');
         bodyCounter++;
     }
-    //console.log(classes);
 }
 
 function game(letter){
     if(correctletters.includes(letter)){
         updateDashes(letter);
-        console.log("TEM");
-    }else {
-        console.log("NÃO TEM");
+    } else {
         wronglettersArray.push(letter);
         wrongletters.innerHTML = "Letras erradas: " + wronglettersArray;
         getBodyParts();
     }
-    console.log(wronglettersArray);
-
-    checkEndGame()
+    checkEndGame();
 }
 
 function checkEndGame(){
@@ -210,21 +150,31 @@ function win() {
     }
 }
 
-function init(){
+function initDoll(){
     eyes.forEach((eye => {
         eye.style.opacity = 0.3;
     }));
-    /*for (let i = 2; i < bodyParts.length; i++) {
-        classes.push(bodyParts[i].className);
-        
-    }*/
-    bodyParts = bodyParts.slice(2, bodyParts.length);
+    bodyParts.forEach(bodyPart => {
+        bodyPart.classList.add("hide");
+    });
     console.log(bodyParts);
+
+}
+
+function init(){
+    classes = [];
+    bodyCounter = 0;
+    wronglettersArray =[];
     setCategoryName();
     //Coloquei só para testar
     hideWord(setWord());
-    window.addEventListener("keypress", getCharCode);
+    initDoll();
 }
 
-//window.addEventListener("keypress", getCharCode);
+function newGame() {
+    window.addEventListener("keypress", getCharCode);
+    init();
+}
+
+window.addEventListener("keypress", getCharCode);
 window.addEventListener("load", init);
