@@ -1,21 +1,28 @@
-
+/* */
 let categoryName = document.querySelector("#category");
+/* */
 let wrongletters = document.querySelector(".wrongletters");
-let dashes = document.querySelector(".dashes");
+/* */
+let dashes = document.querySelector(".dashes"); //Renomear
+/* */
 let eyes = Array.from(document.querySelectorAll(".eyes"));
+/* Array com as partes do corpo */
 let bodyParts = Array.from(document.querySelectorAll("#person div"));
-// let numTry = 0;
+/* palavra corrente */
 let currentWord;
-let randomKeyArr = [];
-let wronglettersArray = [];
-let correctletters = [];
-let bodyCounter;
+/* Lista das letras erradas */
+let wronglettersArray = []; //Explicar
+/* Lista com as letras da palavra corrente */
+let correctletters = []; //Explicar
+/* index da parte do corpo corrente */
+let bodyCounter; //Explicar
 
+bodyParts = bodyParts.slice(2, bodyParts.length); //Ver um outro local para colocar isso.
 
-
-let classes = [];
-bodyParts = bodyParts.slice(2, bodyParts.length);
-
+/*
+Cria as categorias em objetos
+Darei um exemplo e o aluno completa como achar melhor
+*/
 let categories = {
     frutas: ["banana", "maça", "laranja", "mamao", "uva", "melancia", "melao"],
     profissões: ["engenheiro", "advogado", "medico", "professor", "pescador"],
@@ -23,158 +30,188 @@ let categories = {
     cores: ["amarelo", "azul", "laranja", "roxo", "vermelho", "marrom"]
 }
 
-//gera um numero aleatorio. Max é o valor max. Multiplica para ficar como int
+/*
+Gera um numero aleatorio de acordo com o valor max passado
+O aluno irá implementar 
+Importante para treinar o Math
+*/
 function getRandomNumber(max) {
-    /*
-    let randomNumber = Math.random();
-    let arrayIndex  = Math.floor(randomNumber * max);
-    return arrayIndex;
-
-    */
     return Math.floor(Math.random() * max);
 }
 
-//transformar as chaves do objeto em array
-//comentei esse código mas talvez ele seja usado mais na frente
+/*
+Transforma as chaves do objeto em array
+O aluno irá implementar 
+Importante para treinar as propriedades dos objetos
+*/
 function getCatagoryArray(categoriesArray) {
-    /*categoriesArray = Object.keys(categories);
-    return categoriesArray;
-    */
     return Object.keys(categories);
 }
 
-//pega uma categoria de forma aleatoria
+/*
+Seleciona uma categoria de forma aleatoria
+O aluno irá implementar 
+Importante para treinar o index Array
+*/
 function getRandomCategory() {
     let categoriesArray = getCatagoryArray();
     let categoryIndex  = getRandomNumber(categoriesArray.length);
     let randomCategory  = categoriesArray[categoryIndex];
-    //randomKeyArr.push(randomKey);
     return randomCategory;
 }
 
+/*
+Exibe a categoria na UI 
+*/
 function setCategoryName() {
     categoryName.innerHTML = getRandomCategory();
 }
 
-function setWord() {
+/*
+Importante para o aluno 
+Define a palavra que será adivinhada
+*/
+function setCurrentWord() {
     let wordsArray = categories[categoryName.innerHTML];
     let wordsIndex  = getRandomNumber(wordsArray.length);
     currentWord = wordsArray[wordsIndex];
     correctletters = currentWord.split(''); // Lista de verificação
-    //console.log(correctletters);
-    return wordsArray[wordsIndex];
+    hideWord();
 }
 
-//Oculta a palavra
-function hideWord(word) {
-    console.log(word);
+/*
+Oculta a palavra substituindo as letras por -
+O aluno irá implementar a logica para ocultar a palavra
+Importante para o aluno trabalhar com for em strings
+*/
+function hideWord() {
+    console.log(currentWord); //Apagar
     let hideWord = "";
-    for (const iterator of word) {
+    for (const iterator of currentWord) { //Substituir isso por um for normal
         hideWord += "-"
     }
-    dashes.innerHTML = hideWord;
-    wrongletters.innerHTML = "Letras erradas: ";
-    return hideWord;
+    setMessage(hideWord);
 }
 
-
+/*
+Recebe o evento do teclado e passa apenas o valor da letra para a função game
+O aluno nao implementará
+*/
 function getCharCode(e){
-    //numTry +=1;
-    /* let string = randomWordGlobal[0];
-    let keyValue = String.fromCharCode(e.keyCode);
-    matchKeyToWord(keyValue, string); */
-    game(e.key);
-    return e.key
+    game(e.key);    // Ver uma forma de melhorar esse argumento
+    return e.key    // Não precisa disso
 }
 
+/*
+Atualiza a palavra escondida
+Importante para o aluno trabalhar com for em string e condicionais --> aluno implementa
+Renomear nome do método
+*/
 function updateDashes(letter){
-    let algumaword = "";
+    let word = ""; //Renomear
     for (let i = 0; i < currentWord.length; i++) {
         if(currentWord[i] === letter){
-            algumaword += letter;
-            //classes.pop();
-            //bodyParts[0].classList.remove("hide");
-            console.log('entrei');
+            word += letter;
         } else if(dashes.innerHTML[i] != "-"){
-            algumaword += dashes.innerHTML[i];
-            //bodyParts[0].style.opacity = 1;
-            //bodyParts[0].style.zIndex = 10;
+            word += dashes.innerHTML[i];
         } else{
-            algumaword += "-";
+            word += "-";
         }        
     }
-    dashes.innerHTML = algumaword;
+    setMessage(word);
 }
 
-//let bodyCounter = 0;
-
-function getBodyParts(){
-    if(bodyParts.length > bodyCounter){
-        classes.pop();
-        bodyParts[bodyCounter].classList.remove("hide");
-        console.log('desenhei');
-        bodyCounter++;
-    }
+/*
+Desenha a parte do corpo corrente
+O Aluno não irá implementar
+*/
+function drawBodyParts(){
+    bodyParts[bodyCounter].classList.remove("hide");
+    bodyCounter++; //Ver uma forma disso ficar indiderente ao aluno
 }
 
+/*
+Verifica se a letra digitada contem na palavra
+O aluno irá implementar as condições do jogo
+O aluno ira trabalhar com Arrays ao atualizar a lista de letras erradas
+*/
 function game(letter){
     if(correctletters.includes(letter)){
         updateDashes(letter);
     } else {
         wronglettersArray.push(letter);
         wrongletters.innerHTML = "Letras erradas: " + wronglettersArray;
-        getBodyParts();
+        if(bodyParts.length > bodyCounter){
+            drawBodyParts();
+        }
     }
     checkEndGame();
 }
 
+/*
+Verifica se o jogo será encerrado(jogador ganhou ou perdeu) ou se irá continuar.
+O aluno devera implementar as condições e definir as mensagens
+*/
 function checkEndGame(){
-    if(win()) {
-        dashes.innerHTML = "Você venceu!";
-        window.removeEventListener("keypress", getCharCode);
-    }else if(wronglettersArray.length > bodyParts.length){
-        eyes.forEach((eye => {
-            eye.style.opacity = 1;
-            eye.style.zIndex = 10;
-        }));
-        dashes.innerHTML = "Você perdeu!";
-        window.removeEventListener("keypress", getCharCode);
-    }
-}
-
-function win() {
+    //win
     if(!dashes.innerHTML.includes('-')) {
-        return true;
-    }else{
-        return false;
+        setMessage("Você venceu!");
+        window.removeEventListener("keypress", getCharCode); //Ver alguma forma de reusar
+    //bodyparts pode ser uma constante
+    //gameover
+    }else if(wronglettersArray.length > bodyParts.length){
+        drawEyes();
+        setMessage("Você perdeu!");
+        window.removeEventListener("keypress", getCharCode);
     }
 }
 
-function initDoll(){
+/*
+Atualiza a mensagem exibida na UI
+O Aluno não irá implementar
+*/
+function setMessage(message){
+    dashes.innerHTML = message;
+}
+
+/* 
+Desenha os olhos sempre que o joador perde o jogo
+O Aluno não irá implementar
+*/
+function drawEyes(){
     eyes.forEach((eye => {
-        eye.style.opacity = 0.3;
+        eye.style.opacity = 1;
+        eye.style.zIndex = 10;
+    }));
+}
+
+//Reinicia o desenho do boneco.
+//O aluno não deve implementar
+function initPerson(){
+    eyes.forEach((eye => {
+        eye.style.opacity = 0.3; //Declarar como constante
     }));
     bodyParts.forEach(bodyPart => {
         bodyPart.classList.add("hide");
     });
-    console.log(bodyParts);
-
 }
 
+//O aluno não deve implementar isso
 function init(){
-    classes = [];
-    bodyCounter = 0;
-    wronglettersArray =[];
+    /*Index para a as partes do corpo que serão desenhadas*/
+    bodyCounter = 0; //Para que serve?
+    /*Inicianlizando o array que contem as letras que não pertencem a palavra escolhida*/
+    wronglettersArray = [];
+    /*Exibe a mensagem*/
+    wrongletters.innerHTML = "Letras erradas: "; 
+    /*Desenhar o boneco em plano de fundo*/
+    initPerson(); 
+    /*Selecionar aleatoriamente a categoria*/
     setCategoryName();
-    //Coloquei só para testar
-    hideWord(setWord());
-    initDoll();
-}
-
-function newGame() {
+    /*Selecionar aleatoriamente uma palavra da categoria previamente escolhida*/
+    setCurrentWord();
+    /* Evento para capiturar o click no teclado*/
     window.addEventListener("keypress", getCharCode);
-    init();
 }
 
-window.addEventListener("keypress", getCharCode);
 window.addEventListener("load", init);
