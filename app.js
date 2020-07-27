@@ -18,7 +18,7 @@ let categories = {
     profissões: ["engineer", "housekeeper", "babysister", "teacher", "fisherman"],
     animais: ["parrot", "rooster", "dog", "cat", "chicken", "horse", "pig"],
     emoções: ["anger", "envy", "love", "calm"],*/
-    cores: ["amarelo", "azul", "laranja", "roxo", "vermelho", "marrom"],
+    cores: ["amarelo", "azul", "laranja", "roxo", "vermelho", "marrom"]
 }
 
 function getRandomNumber(arr) {
