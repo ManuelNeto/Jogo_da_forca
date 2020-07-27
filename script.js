@@ -4,7 +4,7 @@ let wrongletters = document.querySelector(".wrongletters");
 let dashes = document.querySelector(".dashes");
 let eyes = Array.from(document.querySelectorAll(".eyes"));
 let bodyParts = Array.from(document.querySelectorAll("#person div"));
-let numTry = 0;
+// let numTry = 0;
 let currentWord;
 let randomKeyArr = [];
 let wronglettersArray = [];
@@ -75,13 +75,13 @@ function hideWord(word) {
         hideWord += "-"
     }
     dashes.innerHTML = hideWord;
-    wrongletters.innerHTML = "Letras erradas:";
+    wrongletters.innerHTML = "Letras erradas: ";
     return hideWord;
 }
 
 
 function getCharCode(e) {
-    numTry +=1;
+    //numTry +=1;
     /* let string = randomWordGlobal[0];
     let keyValue = String.fromCharCode(e.keyCode);
     matchKeyToWord(keyValue, string); */
@@ -165,6 +165,7 @@ function game(letter){
     }else {
         console.log("NÃO TEM");
         wronglettersArray.push(letter);
+        wrongletters.innerHTML = "Letras erradas: " + wronglettersArray;
     }
     console.log(wronglettersArray);
 
