@@ -49,6 +49,14 @@ button.botaonovojogo {
 
 }
 
+#keyPressed {
+    transform: translate(0px, -150px); /*acho que ficou num lugar bacana*/
+    float: initial;
+    font-size: 2vw;
+	font: italic;	
+	color:white;
+}
+
 #category {
 	transform: translate(-10px, -150px); /*acho que ficou num lugar bacana*/
 	float: initial;
@@ -66,7 +74,7 @@ div.dashes {
 }
 
 div.wrongletters {
-    transform: translate(0px, -110px); /*acho que ficou num lugar bacana*/
+    transform: translate(0px, -90px); /*acho que ficou num lugar bacana*/
     float: initial;
     font-size: 2vw;
 	font: italic;	
