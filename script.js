@@ -1,7 +1,7 @@
 /* Elemento HTML referente a categoria */
 let categoryName = document.querySelector("#category");
 /* Elemento HTML referente a lista das letras erradas*/
-let wrongletters = document.querySelector(".wrongLetters");
+let wrongLetters = document.querySelector(".wrongLetters");
 /* Elemento HTML referente a palavra oculta
    Utilizaremos esse mesmo elemento para exibir as mensagens do jogo*/
 let dashes = document.querySelector(".dashes");
@@ -13,9 +13,9 @@ bodyParts = bodyParts.slice(2, bodyParts.length);
 /* Palavra corrente */
 let currentWord;
 /* Lista das letras erradas */
-let wronglettersArray = []; //Explicar
+let wrongLettersArray = []; //Explicar
 /* Lista com as letras da palavra corrente */
-let correctletters = []; //Explicar
+let correctLetters = []; //Explicar
 /* Index da parte do corpo corrente */
 let bodyCounter;
 /* Numero de chances do jogador */
@@ -82,14 +82,14 @@ function setCurrentWord() {
     /*
     Crie um array com as possíveis palavras de acordo com a categoria definida
     Selecione aleatoriamente uma dessas palavras
-    Atualize correctletters com as letras da palavra selecionada
+    Atualize correctLetters com as letras da palavra selecionada
         Dica: Use o método split
     Oculte a palavra selecionada na UI
     */
     let wordsArray = categories[categoryName.innerHTML];
     let wordsIndex  = getRandomNumber(wordsArray.length);
     currentWord = wordsArray[wordsIndex];
-    correctletters = currentWord.split(''); // Lista de verificação
+    correctLetters = currentWord.split(''); // Lista de verificação
     hideWord();
 }
 
@@ -157,17 +157,17 @@ function game(letter){
     Se currentWord possuir letter
         Atualize dashes subistituindo o(s) traço(s) por letter   
     */
-    if(correctletters.includes(letter)){
+    if(correctLetters.includes(letter)){
         updateDashes(letter);
     /*
     Se não
-        Adicione letter em wronglettersArray
-        Atualize wrongletters na UI
+        Adicione letter em wrongLettersArray
+        Atualize wrongLetters na UI
         Desenhe uma parte do corpo
     */
     } else {
-        wronglettersArray.push(letter);
-        wrongletters.innerHTML = "Letras erradas: " + wronglettersArray;
+        wrongLettersArray.push(letter);
+        wrongLetters.innerHTML = "Letras erradas: " + wrongLettersArray;
         if(bodyParts.length > bodyCounter){
             drawBodyParts();
         }
@@ -199,7 +199,7 @@ function checkEndGame(){
         Defina uma mensagem para exibir na UI
         Remova o evento listener para captura de tecla
     */
-    }else if(wronglettersArray.length >= numOfChances){
+    }else if(wrongLettersArray.length >= numOfChances){
         drawEyes();
         setMessage("Você perdeu!");
         window.removeEventListener("keypress", getCharCode);
@@ -241,8 +241,8 @@ Inicia as configurações do jogo
 */
 function init(){
     bodyCounter = 0;
-    wronglettersArray = [];
-    wrongletters.innerHTML = "Letras erradas: "; 
+    wrongLettersArray = [];
+    wrongLetters.innerHTML = "Letras erradas: "; 
     initPerson();
     setCategoryName();
     setCurrentWord();
