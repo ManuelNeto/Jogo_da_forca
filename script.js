@@ -1,7 +1,7 @@
 /* */
 let categoryName = document.querySelector("#category");
 /* */
-let wrongletters = document.querySelector(".wrongletters");
+let wrongletters = document.querySelector(".wrongLetters");
 /* */
 let dashes = document.querySelector(".dashes"); //Renomear
 /* */
