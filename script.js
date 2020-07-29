@@ -1,23 +1,27 @@
-/* */
+/* Elemento HTML referente a categoria */
 let categoryName = document.querySelector("#category");
-/* */
+/* Elemento HTML referente a lista das letras erradas*/
 let wrongletters = document.querySelector(".wrongLetters");
-/* */
-let dashes = document.querySelector(".dashes"); //Renomear
-/* */
+/* Elemento HTML referente a palavra oculta
+   Utilizaremos esse mesmo elemento para exibir as mensagens do jogo*/
+let dashes = document.querySelector(".dashes");
+/* Array com elementos HTML referentes aos olhos do personagem */
 let eyes = Array.from(document.querySelectorAll(".eyes"));
-/* Array com as partes do corpo */
+/* Array com elementos HTML referentes as partes do corpo */
 let bodyParts = Array.from(document.querySelectorAll("#person div"));
-/* palavra corrente */
+bodyParts = bodyParts.slice(2, bodyParts.length);
+/* Palavra corrente */
 let currentWord;
 /* Lista das letras erradas */
 let wronglettersArray = []; //Explicar
 /* Lista com as letras da palavra corrente */
 let correctletters = []; //Explicar
-/* index da parte do corpo corrente */
-let bodyCounter; //Explicar
-
-bodyParts = bodyParts.slice(2, bodyParts.length); //Ver um outro local para colocar isso.
+/* Index da parte do corpo corrente */
+let bodyCounter;
+/* Numero de chances do jogador */
+const numOfChances = 7;
+/* Valor para opacidade dos olhos */
+const opacityEyes = 0.3;
 
 /*
 Cria as categorias em objetos
@@ -31,11 +35,12 @@ let categories = {
 }
 
 /*
-Gera um numero aleatorio de acordo com o valor max passado
-O aluno irá implementar 
-Importante para treinar o Math
+Gera um numero aleatorio de acordo com o valor máximo passado no argumento
 */
 function getRandomNumber(max) {
+    /*
+    Dica: Use Math.random e Math.floor
+    */
     return Math.floor(Math.random() * max);
 }
 
@@ -49,11 +54,14 @@ function getCatagoryArray(categoriesArray) {
 }
 
 /*
-Seleciona uma categoria de forma aleatoria
-O aluno irá implementar 
-Importante para treinar o index Array
+Seleciona uma categoria aleatoriamente
 */
 function getRandomCategory() {
+    /*
+    Crie um array com todas as categorias
+    Gere um número aleatório com valor máximo igual ao numéro total de categorias
+    Retorne a categoria selecionada
+    */
     let categoriesArray = getCatagoryArray();
     let categoryIndex  = getRandomNumber(categoriesArray.length);
     let randomCategory  = categoriesArray[categoryIndex];
@@ -68,10 +76,16 @@ function setCategoryName() {
 }
 
 /*
-Importante para o aluno 
-Define a palavra que será adivinhada
+Define aleatoriamente a palavra que será adivinhada
 */
 function setCurrentWord() {
+    /*
+    Crie um array com as possíveis palavras de acordo com a categoria definida
+    Selecione aleatoriamente uma dessas palavras
+    Atualize correctletters com as letras da palavra selecionada
+        Dica: Use o método split
+    Oculte a palavra selecionada na UI
+    */
     let wordsArray = categories[categoryName.innerHTML];
     let wordsIndex  = getRandomNumber(wordsArray.length);
     currentWord = wordsArray[wordsIndex];
@@ -80,14 +94,15 @@ function setCurrentWord() {
 }
 
 /*
-Oculta a palavra substituindo as letras por -
-O aluno irá implementar a logica para ocultar a palavra
-Importante para o aluno trabalhar com for em strings
+Oculta a palavra para ser exibida na UI
 */
 function hideWord() {
-    console.log(currentWord); //Apagar
+    /*
+    Gere uma string com a quantidade de traços igual ao tamanho de currentWord
+    Atualize a mensagem na UI com a nova string
+    */
     let hideWord = "";
-    for (const iterator of currentWord) { //Substituir isso por um for normal
+    for (const iterator of currentWord) {
         hideWord += "-"
     }
     setMessage(hideWord);
@@ -95,23 +110,27 @@ function hideWord() {
 
 /*
 Recebe o evento do teclado e passa apenas o valor da letra para a função game
-O aluno nao implementará
 */
 function getCharCode(e){
-    game(e.key);    // Ver uma forma de melhorar esse argumento
-    return e.key    // Não precisa disso
+    game(e.key);
 }
 
 /*
-Atualiza a palavra escondida
-Importante para o aluno trabalhar com for em string e condicionais --> aluno implementa
-Renomear nome do método
+Recebe uma String
+Substitui os traços da palavra oculta pela letra passada como parâmetro 
 */
 function updateDashes(letter){
-    let word = ""; //Renomear
+    /*
+    Percorra currentWord
+        Substitua os traços pela letra informada nas posições corretas
+            Dica: Crie uma variável auxiliar
+    Atualize a mensagem na UI
+    */
+    let word = "";
     for (let i = 0; i < currentWord.length; i++) {
         if(currentWord[i] === letter){
             word += letter;
+        
         } else if(dashes.innerHTML[i] != "-"){
             word += dashes.innerHTML[i];
         } else{
@@ -123,21 +142,29 @@ function updateDashes(letter){
 
 /*
 Desenha a parte do corpo corrente
-O Aluno não irá implementar
 */
 function drawBodyParts(){
     bodyParts[bodyCounter].classList.remove("hide");
-    bodyCounter++; //Ver uma forma disso ficar indiderente ao aluno
+    bodyCounter++; 
 }
 
 /*
-Verifica se a letra digitada contem na palavra
-O aluno irá implementar as condições do jogo
-O aluno ira trabalhar com Arrays ao atualizar a lista de letras erradas
+Recebe uma String
+Verifica se a String contem na palavra
 */
 function game(letter){
+    /*
+    Se currentWord possuir letter
+        Atualize dashes subistituindo o(s) traço(s) por letter   
+    */
     if(correctletters.includes(letter)){
         updateDashes(letter);
+    /*
+    Se não
+        Adicione letter em wronglettersArray
+        Atualize wrongletters na UI
+        Desenhe uma parte do corpo
+    */
     } else {
         wronglettersArray.push(letter);
         wrongletters.innerHTML = "Letras erradas: " + wronglettersArray;
@@ -145,21 +172,34 @@ function game(letter){
             drawBodyParts();
         }
     }
+    /*
+    Varefique o encerramento do jogo
+    */
     checkEndGame();
 }
 
 /*
-Verifica se o jogo será encerrado(jogador ganhou ou perdeu) ou se irá continuar.
-O aluno devera implementar as condições e definir as mensagens
+Verifica a condição para encerramento (jogador ganhou ou perdeu)
+    Se ganhou, exiba uma mensagem. Ex: Você venceu
+    Se perdeu, exiba uma mensagem. Ex: Você perdeu
+    Se não, não faça nada
 */
 function checkEndGame(){
-    //win
+    /*
+    Condição da vitória: dashes não conter -
+        Defina uma mensagem para exibir na UI
+        Remova o evento listener para captura de tecla
+    */
     if(!dashes.innerHTML.includes('-')) {
         setMessage("Você venceu!");
         window.removeEventListener("keypress", getCharCode); //Ver alguma forma de reusar
-    //bodyparts pode ser uma constante
-    //gameover
-    }else if(wronglettersArray.length > bodyParts.length){
+    /*
+    Condição da derrota: número de letras erradas ser maior ou igual ao numero de chances
+        Desenhe os olhos
+        Defina uma mensagem para exibir na UI
+        Remova o evento listener para captura de tecla
+    */
+    }else if(wronglettersArray.length >= numOfChances){
         drawEyes();
         setMessage("Você perdeu!");
         window.removeEventListener("keypress", getCharCode);
@@ -168,15 +208,14 @@ function checkEndGame(){
 
 /*
 Atualiza a mensagem exibida na UI
-O Aluno não irá implementar
+Recebe como argumento uma String e a define como a mensagem na UI.
 */
 function setMessage(message){
     dashes.innerHTML = message;
 }
 
 /* 
-Desenha os olhos sempre que o joador perde o jogo
-O Aluno não irá implementar
+Desenha os olhos do personagem
 */
 function drawEyes(){
     eyes.forEach((eye => {
@@ -185,32 +224,28 @@ function drawEyes(){
     }));
 }
 
-//Reinicia o desenho do boneco.
-//O aluno não deve implementar
+/*
+Oculta as partes do corpo do personagem
+*/
 function initPerson(){
     eyes.forEach((eye => {
-        eye.style.opacity = 0.3; //Declarar como constante
+        eye.style.opacity = opacityEyes; 
     }));
     bodyParts.forEach(bodyPart => {
         bodyPart.classList.add("hide");
     });
 }
 
-//O aluno não deve implementar isso
+/*
+Inicia as configurações do jogo
+*/
 function init(){
-    /*Index para a as partes do corpo que serão desenhadas*/
-    bodyCounter = 0; //Para que serve?
-    /*Inicianlizando o array que contem as letras que não pertencem a palavra escolhida*/
+    bodyCounter = 0;
     wronglettersArray = [];
-    /*Exibe a mensagem*/
     wrongletters.innerHTML = "Letras erradas: "; 
-    /*Desenhar o boneco em plano de fundo*/
-    initPerson(); 
-    /*Selecionar aleatoriamente a categoria*/
+    initPerson();
     setCategoryName();
-    /*Selecionar aleatoriamente uma palavra da categoria previamente escolhida*/
     setCurrentWord();
-    /* Evento para capiturar o click no teclado*/
     window.addEventListener("keypress", getCharCode);
 }
 
